@@ -3,7 +3,8 @@
 namespace Bazo\NewRelic;
 
 use Nette\Application\Application;
-use Nette\Application\Request;
+use Nette\Application\BadRequestException;
+use Nette\Http\Request;
 
 
 
@@ -22,7 +23,7 @@ class NewRelicProfiler
 
 	public function onError(Application $app, \Exception $e)
 	{
-		if ($e instanceof Application\BadRequestException) {
+		if ($e instanceof BadRequestException) {
 			return; // ignore
 		}
 

@@ -2,7 +2,7 @@
 
 namespace Bazo\NewRelic;
 
-use Nette\Diagnostics\Logger;
+use Tracy\Logger;
 
 
 

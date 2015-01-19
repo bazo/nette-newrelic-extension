@@ -2,23 +2,26 @@
 
 namespace Bazo\NewRelic\DI;
 
+use Nette\DI\CompilerExtension;
+use Nette\PhpGenerator\ClassType;
+
+
+
 /**
- * WatchdogExtension
+ * New Relic Extension
  *
- * @author Martin Bažík
+ * @author Martin Bažík <martin@bazo.sk>
  */
-class NewRelicExtension extends \Nette\DI\CompilerExtension
+class NewRelicExtension extends CompilerExtension
 {
 
 	/** @var array */
 	public $defaults = [
-		'useLogger' => TRUE,
-		'appName' => 'NetteApp'
+		'useLogger'	 => TRUE,
+		'appName'	 => 'NetteApp'
 	];
 	private $useLogger;
 	private $config;
-
-
 
 	/**
 	 * Processes configuration data
@@ -29,7 +32,7 @@ class NewRelicExtension extends \Nette\DI\CompilerExtension
 	{
 		$container = $this->getContainerBuilder();
 
-		$this->config = $config = $this->getConfig($this->defaults, TRUE);
+		$this->config	 = $config			 = $this->getConfig($this->defaults, TRUE);
 		$this->useLogger = $config['useLogger'];
 		unset($config['useLogger']);
 
@@ -48,7 +51,7 @@ class NewRelicExtension extends \Nette\DI\CompilerExtension
 	}
 
 
-	public function afterCompile(\Nette\PhpGenerator\ClassType $class)
+	public function afterCompile(ClassType $class)
 	{
 		if (extension_loaded('newrelic')) {
 			$initialize = $class->methods['initialize'];
@@ -59,7 +62,7 @@ class NewRelicExtension extends \Nette\DI\CompilerExtension
 			$initialize->addBody('$app->onError[] = callback($profiler, \'onError\');');
 
 			if ($this->useLogger === TRUE) {
-				$initialize->addBody('\Nette\Diagnostics\Debugger::$logger = $this->getService(?);', [$this->prefix('logger')]);
+				$initialize->addBody('\Tracy\Debugger::setLogger($this->getService(?));', [$this->prefix('logger')]);
 			}
 
 			$initialize->addBody('newrelic_set_appname(?);', [$this->config['appName']]);
