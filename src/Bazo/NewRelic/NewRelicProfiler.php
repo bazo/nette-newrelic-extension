@@ -4,7 +4,7 @@ namespace Bazo\NewRelic;
 
 use Nette\Application\Application;
 use Nette\Application\BadRequestException;
-use Nette\Http\Request;
+use Nette\Application\Request;
 
 
 
