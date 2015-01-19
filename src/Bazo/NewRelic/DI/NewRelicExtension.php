@@ -36,18 +36,15 @@ class NewRelicExtension extends CompilerExtension
 		$this->useLogger = $config['useLogger'];
 		unset($config['useLogger']);
 
-		$container->addDefinition($this->prefix('logger'))
-				->setClass('\Bazo\NewRelic\NewRelicLogger')
-				->setAutowired(FALSE);
+		if ($this->useLogger) {
+			$container->addDefinition($this->prefix('logger'))
+					->setClass('\Bazo\NewRelic\NewRelicLogger', [$container->expand('%appDir%/log')])
+					->setAutowired(FALSE);
+		}
 
 		$container->addDefinition($this->prefix('profiler'))
 				->setClass('\Bazo\NewRelic\NewRelicProfiler')
 				->setAutowired(FALSE);
-
-		$container->addDefinition('newRelicLogger')
-				->setClass('\Bazo\NewRelic\NewRelicLogger')
-				->addTag('logger')
-				->setFactory('@container::getService', [$this->prefix('logger')]);
 	}
 
 
