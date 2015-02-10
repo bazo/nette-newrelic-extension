@@ -21,7 +21,7 @@ class NewRelicExtension extends CompilerExtension
 		'appName'	 => 'NetteApp'
 	];
 	private $useLogger;
-	private $config;
+	private $configuration;
 
 	/**
 	 * Processes configuration data
@@ -32,7 +32,7 @@ class NewRelicExtension extends CompilerExtension
 	{
 		$container = $this->getContainerBuilder();
 
-		$this->config	 = $config			 = $this->getConfig($this->defaults, TRUE);
+		$this->configuration	 = $config			 = $this->getConfig($this->defaults, TRUE);
 		$this->useLogger = $config['useLogger'];
 		unset($config['useLogger']);
 
@@ -62,7 +62,7 @@ class NewRelicExtension extends CompilerExtension
 				$initialize->addBody('\Tracy\Debugger::setLogger($this->getService(?));', [$this->prefix('logger')]);
 			}
 
-			$initialize->addBody('newrelic_set_appname(?);', [$this->config['appName']]);
+			$initialize->addBody('newrelic_set_appname(?);', [$this->configuration['appName']]);
 		}
 	}
 
