@@ -55,8 +55,8 @@ class NewRelicExtension extends CompilerExtension
 
 			$initialize->addBody('$app = $this->getService(?);', ['application']);
 			$initialize->addBody('$profiler = $this->getService(?);', [$this->prefix('profiler')]);
-			$initialize->addBody('$app->onRequest[] = callback($profiler, \'onRequest\');');
-			$initialize->addBody('$app->onError[] = callback($profiler, \'onError\');');
+			$initialize->addBody('$app->onRequest[] = [$profiler, \'onRequest\'];');
+			$initialize->addBody('$app->onError[] = [$profiler, \'onError\'];');
 
 			if ($this->useLogger === TRUE) {
 				$initialize->addBody('\Tracy\Debugger::setLogger($this->getService(?));', [$this->prefix('logger')]);
